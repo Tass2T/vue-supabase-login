@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('store', () => {
   const loggedUser: Ref<any> = ref(null)
   const router = useRouter()
 
-  router.beforeEach(async (to, from) => {
+  router.beforeEach(async (to) => {
     const user = await supabase.auth.getUser()
     if (to.name !== 'login' && !user?.data?.user?.id) return '/login'
     if (to.name === 'login' && user?.data?.user?.id) return '/'
