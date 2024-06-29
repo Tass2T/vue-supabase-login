@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth'
-
-const { logOut } = useAuthStore()
+import HeaderComponent from '@/components/HeaderComponent.vue'
 </script>
 
 <template>
-  <main class="size-screen flex gap-2">
+  <main class="size-screen flex gap-2 flex flex-col">
+    <HeaderComponent />
     <span>HOME</span>
-    <button @click="logOut()">Logout</button>
   </main>
 </template>
