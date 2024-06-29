@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/stores/auth'
 import HomeOne from '@/views/HomeOne.vue'
 import HomeTwo from '@/views/HomeTwo.vue'
+import { storeToRefs } from 'pinia'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -33,11 +34,6 @@ const router = createRouter({
       component: LoginView
     }
   ]
-})
-
-router.beforeResolve((from, to) => {
-  const { user } = useAuthStore()
-  console.log(user)
 })
 
 export default router

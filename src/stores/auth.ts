@@ -1,22 +1,30 @@
 import { createClient } from '@supabase/supabase-js'
 import { defineStore } from 'pinia'
 import { type Ref, ref } from 'vue'
-import router from '@/router'
+import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('store', () => {
   const supabaseURL = import.meta.env.VITE_SUPABASE_PROJECT_URL
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
   const supabase = createClient(supabaseURL, supabaseAnonKey)
-  const user: Ref<any> = ref(null)
+  const authLoading = ref<boolean>(true)
+  const loggedUser: Ref<any> = ref(null)
+  const router = useRouter()
+
+  router.beforeEach(async (to, from) => {
+    const user = await supabase.auth.getUser()
+    if (to.name !== 'login' && !user?.data?.user?.id) return '/login'
+    if (to.name === 'login' && user?.data?.user?.id) return '/'
+  })
 
   supabase.auth.onAuthStateChange((event) => {
     if (event === 'SIGNED_IN') {
       supabase.auth.getUser().then((res) => {
-        user.value = res.data.user
+        loggedUser.value = res.data.user
       })
     } else if (event === 'SIGNED_OUT') {
-        user.value = null
-        router.push('/login')
+      loggedUser.value = null
+      router.push('/login')
     }
   })
 
@@ -35,5 +43,5 @@ export const useAuthStore = defineStore('store', () => {
     supabase.auth.signOut()
   }
 
-  return { logOut, logWithGoogle, user }
+  return { logOut, logWithGoogle, loggedUser, authLoading }
 })
