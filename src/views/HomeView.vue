@@ -3,8 +3,8 @@ import HeaderComponent from '@/components/HeaderComponent.vue'
 </script>
 
 <template>
-  <main class="size-screen flex gap-2 flex flex-col">
+  <main class="size-screen flex flex-col">
     <HeaderComponent />
-    <span>HOME</span>
+    <RouterView />
   </main>
 </template>

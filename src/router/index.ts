@@ -1,13 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
+import { useAuthStore } from '@/stores/auth'
+import HomeOne from '@/views/HomeOne.vue'
+import HomeTwo from '@/views/HomeTwo.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      children: [
+        {
+          path: '/',
+          name: 'homeOne',
+          component: HomeOne
+        },
+        {
+          path: '/two',
+          name: 'homeTwo',
+          component: HomeTwo
+        }
+      ]
     },
     {
       path: '/login',
@@ -18,6 +33,11 @@ const router = createRouter({
       component: LoginView
     }
   ]
+})
+
+router.beforeResolve((from, to) => {
+  const { user } = useAuthStore()
+  console.log(user)
 })
 
 export default router
